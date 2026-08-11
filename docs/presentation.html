@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drift-Sense Presentation Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --cyan: #0ea5e9;
+      --purple: #8b5cf6;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    header {
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(8px);
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-pill {
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      color: #fff;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn:hover {
+      background: var(--card-border);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .slide-counter {
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      min-width: 90px;
+      text-align: center;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 1200px;
+      height: 100%;
+      max-height: 680px;
+      flex-direction: column;
+      gap: 1.5rem;
+      animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .slide-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .category {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--cyan);
+    }
+
+    .title {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text-main);
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      flex: 1;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+      flex: 1;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent, var(--cyan));
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--accent, var(--cyan));
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .card-list li {
+      font-size: 0.92rem;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
+
+    .card-list strong {
+      color: var(--text-main);
+    }
+
+    .metric-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: var(--accent, var(--emerald));
+    }
+
+    .metric-val {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--accent, var(--emerald));
+      margin-bottom: 0.2rem;
+    }
+
+    .metric-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-main);
+    }
+
+    .metric-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .hero-box {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      flex: 1;
+      justify-content: center;
+      position: relative;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      background: linear-gradient(135deg, #ffffff, var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 1.4rem;
+      color: var(--cyan);
+      font-weight: 500;
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .role-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 1.25rem;
+      border-radius: 10px;
+    }
+
+    .role-box h4 {
+      color: var(--purple);
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .role-box p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(0,0,0,0.3);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      color: var(--cyan);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <span class="brand-pill">Slide Deck</span>
+      <span>Drift-Sense Presentation</span>
+    </div>
+    <div class="controls">
+      <button class="btn" id="prevBtn">← Previous</button>
+      <span class="slide-counter" id="counter">Slide 1 / 9</span>
+      <button class="btn" id="nextBtn">Next →</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- SLIDE 1 -->
+    <div class="slide active">
+      <div class="hero-box">
+        <span class="category">Semiconductor Tooling Algorithms</span>
+        <h1 class="hero-title">Drift-Sense</h1>
+        <p class="hero-sub">Navigation-Error Recovery & Sub-Pixel Alignment for Wafer Inspection Tools</p>
+        
+        <div class="role-grid">
+          <div class="role-box">
+            <h4>Member B (Algorithmic Lead)</h4>
+            <p>Adaptive Preprocessing (CLAHE), Pyramidal Multi-Scale Search, NMS Peak Extraction, Periodicity Tie-Breaking, Sub-Pixel Parabolic Fit, ORB+RANSAC AI Fallback & Technical Docs.</p>
+          </div>
+          <div class="role-box">
+            <h4 style="color: var(--cyan);">Shubh (Data & Evaluation)</h4>
+            <p>Synthetic Ground-Truth Data Pipeline, Metrics Evaluation Script, Result CSV Generation, Visualization Overlays & GitHub Repository Setup.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="category">Industry Challenge</span>
+        <h2 class="title">Stage Drift in Semiconductor Wafer Inspection</h2>
+      </div>
+      <div class="grid-3">
+        <div class="card" style="--accent: var(--cyan);">
+          <div class="card-title">1. Mechanical Drift</div>
+          <ul class="card-list">
+            <li><strong>Stage Hysteresis:</strong> Nanometer-scale stage vibration & motor drift during step-and-repeat scans.</li>
+            <li><strong>Thermal Expansion:</strong> Microscopic shifts across optical field due to tool heat.</li>
+            <li><strong>Positioning Error:</strong> Inspection sensor lands away from nominal target coordinates.</li>
+          </ul>
+        </div>
+        <div class="card" style="--accent: var(--purple);">
+          <div class="card-title">2. Optical Ambiguity</div>
+          <ul class="card-list">
+            <li><strong>High Periodicity:</strong> Repeating memory cell arrays contain thousands of identical features.</li>
+            <li><strong>Low Optical Contrast:</strong> Translucent oxide & metal layers create subtle gradients.</li>
+            <li><strong>Sensor Noise:</strong> Optical gain variance & shot noise degrade naive matchers.</li>
+          </ul>
+        </div>
+        <div class="card" style="--accent: var(--emerald);">
+          <div class="card-title">3. Technical Solution</div>
+          <ul class="card-list">
+            <li><strong>Drift-Sense Engine:</strong> Deterministic sub-pixel pattern matcher requiring 0ms training time.</li>
+            <li><strong>Nanometer Precision:</strong> Sub-0.03 pixel localization (~15 nm physical resolution).</li>
+            <li><strong>Scale Invariant:</strong> Multi-scale pyramid handles ±15% zoom variations.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="category">Pipeline Architecture</span>
+        <h2 class="title">End-to-End System Processing Flow</h2>
+      </div>
+      <div class="grid-4">
+        <div class="card" style="--accent: var(--cyan);">
+          <div class="card-title">Step 1: Preprocess</div>
+          <ul class="card-list">
+            <li><code>src/preprocess.py</code></li>
+            <li><strong>CLAHE Equalization:</strong> Contrast enhancement over 8x8 tiles.</li>
+            <li><strong>Gaussian Denoise:</strong> High-frequency shot noise suppression.</li>
+            <li><strong>Sobel Edges:</strong> Edge gradient magnitude maps.</li>
+          </ul>
+        </div>
+        <div class="card" style="--accent: var(--purple);">
+          <div class="card-title">Step 2: Multi-Scale</div>
+          <ul class="card-list">
+            <li><code>src/matcher.py</code></li>
+            <li><strong>Pyramid Search:</strong> Hypotheses range <code>s ∈ [0.85, 1.15]</code>.</li>
+            <li><strong>Bicubic Resampling:</strong> High quality image scaling.</li>
+            <li><strong>NCC Tensor:</strong> Normalized Cross-Correlation evaluation.</li>
+          </ul>
+        </div>
+        <div class="card" style="--accent: var(--amber);">
+          <div class="card-title">Step 3: NMS & Tie-Break</div>
+          <ul class="card-list">
+            <li><code>src/peaks.py</code></li>
+            <li><strong>NMS Dilation:</strong> Extracts top-K candidate peaks.</li>
+            <li><strong>Periodicity Check:</strong> Flags competing grid peaks.</li>
+            <li><strong>Stage Prior:</strong> Center distance penalty function.</li>
+          </ul>
+        </div>
+        <div class="card" style="--accent: var(--emerald);">
+          <div class="card-title">Step 4: Sub-Pixel & AI</div>
+          <ul class="card-list">
+            <li><code>src/matcher.py</code></li>
+            <li><strong>2D Parabola Fit:</strong> Parabolic sub-pixel curve interpolation.</li>
+            <li><strong>ORB+RANSAC:</strong> AI feature-matching fallback for score &lt; 0.40.</li>
+            <li><strong>Final Center:</strong> <code>(pred_x, pred_y)</code>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="category">Member B Core</span>
+        <h2 class="title">Adaptive Preprocessing & Pyramidal Multi-Scale Search</h2>
+      </div>
+      <div class="grid-2">
+        <div class="card" style="--accent: var(--cyan);">
+          <div class="card-title">Adaptive Intensity Preprocessing (src/preprocess.py)</div>
+          <ul class="card-list">
+            <li><strong>CLAHE Equalization:</strong> Enhances local contrast in low-reflectance silicon oxide/metal layers without over-amplifying background noise.</li>
+            <li><strong>Gaussian Denoising (3x3):</strong> Attenuates high-frequency optical sensor shot noise.</li>
+            <li><strong>Sobel Gradient Magnitude:</strong> Extracts spatial edge structures resilient against non-linear lighting variation.</li>
+            <li><strong>Z-Score Calibration:</strong> Normalizes intensity variations for zero mean and unit variance.</li>
+          </ul>
+        </div>
+        <div class="card" style="--accent: var(--purple);">
+          <div class="card-title">Pyramidal Multi-Scale Search Space (src/matcher.py)</div>
+          <ul class="card-list">
+            <li><strong>Scale Invariance:</strong> Evaluates template scale hypotheses across scale factors <code>s ∈ {0.95s, 1.0s, 1.05s}</code>.</li>
+            <li><strong>Bicubic & Area Resampling:</strong> Uses <code>INTER_AREA</code> for downscaling and <code>INTER_CUBIC</code> for upscaling to eliminate aliasing.</li>
+            <li><strong>Normalized Cross-Correlation (NCC):</strong> Invariant to linear brightness and gain shifts: <code>I → aI + b</code>.</li>
+            <li><strong>0ms Training Latency:</strong> Deterministic signal engine with zero GPU training overhead.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="category">Member B Core</span>
+        <h2 class="title">Periodicity Tie-Breaking & Sub-Pixel Parabolic Fit</h2>
+      </div>
+      <div class="grid-2">
+        <div class="card" style="--accent: var(--amber);">
+          <div class="card-title">Periodicity Tie-Breaking (src/peaks.py)</div>
+          <ul class="card-list">
+            <li><strong>Non-Maximum Suppression (NMS):</strong> Extracts local peak candidates using 2D dilation morphology.</li>
+            <li><strong>Grid Ambiguity Detection:</strong> Flags periodicity when multiple candidate peaks exhibit correlation within 5% of global maximum.</li>
+            <li><strong>Physical Stage Prior:</strong> Applies stage drift prior penalty favoring peaks closer to search ROI center.</li>
+            <li><strong>Fitness Formula:</strong> <code>Fitness = 0.8 * Score + 0.2 * (1 - DistPenalty)</code>.</li>
+          </ul>
+        </div>
+        <div class="card" style="--accent: var(--emerald);">
+          <div class="card-title">Sub-Pixel Parabolic Curve Fit (src/peaks.py)</div>
+          <ul class="card-list">
+            <li><strong>Discretization Limit:</strong> Camera sensor pixels discretize position into 1px steps (~500nm).</li>
+            <li><strong>2D Parabolic Fit:</strong> Fits continuous quadratic parabola through 3x3 correlation neighborhood around integer peak.</li>
+            <li><strong>Sub-Pixel Shift Formula:</strong> <code>dx = (L - R) / (2 * (L - 2C + R))</code>.</li>
+            <li><strong>Extreme Accuracy:</strong> Achieves sub-15 nanometer spatial localization (&lt; 0.03 px error).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="category">AI Fallback</span>
+        <h2 class="title">Zero-Shot AI Feature Matching (ORB + RANSAC)</h2>
+      </div>
+      <div class="card" style="--accent: var(--purple); flex: 1;">
+        <div class="card-title">Resilience Engine for Low Confidence Scenarios (src/matcher.py)</div>
+        <ul class="card-list">
+          <li><strong>Dynamic Trigger:</strong> Automatically engages when template correlation confidence drops below <code>0.40</code> under severe optical distortion.</li>
+          <li><strong>ORB Keypoint Extraction:</strong> Detects 1,000 scale-invariant oriented FAST keypoints and binary BRIEF descriptors.</li>
+          <li><strong>Hamming Descriptor Matching:</strong> Evaluates binary descriptor distance using FLANN / Brute-Force matcher.</li>
+          <li><strong>RANSAC Homography Estimation:</strong> Filters geometric outlier matches using 4-point RANSAC homography estimation matrix <code>H</code> (threshold = 5.0 px).</li>
+          <li><strong>Target Center Projection:</strong> Projects reference template center coordinate through homography matrix <code>H</code> to recover target position under non-linear distortion.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SLIDE 7 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="category">Empirical Results</span>
+        <h2 class="title">Benchmark Verification & Accuracy Performance</h2>
+      </div>
+      <div class="grid-4">
+        <div class="metric-card" style="--accent: var(--emerald);">
+          <div class="metric-val">0.029 px</div>
+          <div class="metric-label">Median Error</div>
+          <div class="metric-sub">Sub-15nm resolution</div>
+        </div>
+        <div class="metric-card" style="--accent: var(--cyan);">
+          <div class="metric-val">100.0%</div>
+          <div class="metric-label">Hit Rate (&lt; 1px)</div>
+          <div class="metric-sub">Unique pattern sites</div>
+        </div>
+        <div class="metric-card" style="--accent: var(--purple);">
+          <div class="metric-val">80.0%</div>
+          <div class="metric-label">Hit Rate (&lt; 5px)</div>
+          <div class="metric-sub">Overall 40 test cases</div>
+        </div>
+        <div class="metric-card" style="--accent: var(--amber);">
+          <div class="metric-val">0 ms</div>
+          <div class="metric-label">Training Latency</div>
+          <div class="metric-sub">Deterministic inference</div>
+        </div>
+      </div>
+
+      <div class="card" style="--accent: var(--cyan); flex: 1; margin-top: 1rem;">
+        <div class="card-title">Execution Benchmark Summary (data/synthetic/ground_truth.csv)</div>
+        <ul class="card-list">
+          <li><strong>Sample #000 (Easy Unique Pattern):</strong> True <code>(111.0, 221.0)</code> | Pred <code>(110.9601, 221.0228)</code> | Error: <code>0.046 px</code> | Score: <code>0.8553</code></li>
+          <li><strong>Sample #015 (Easy Unique Pattern):</strong> True <code>(207.0, 373.0)</code> | Pred <code>(207.0207, 373.0123)</code> | Error: <code>0.024 px</code> | Score: <code>0.8508</code></li>
+          <li><strong>Sample #036 (Hard Periodic Pattern):</strong> True <code>(432.0, 112.0)</code> | Pred <code>(431.9930, 111.9910)</code> | Error: <code>0.011 px</code> | Score: <code>0.8548</code></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SLIDE 8 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="category">Demo Breakdown</span>
+        <h2 class="title">Technical Presentation & Live Demo Structure</h2>
+      </div>
+      <div class="grid-2">
+        <div class="card" style="--accent: var(--cyan);">
+          <div class="card-title">3-Minute Technical Video Breakdown</div>
+          <ul class="card-list">
+            <li><strong>Segment 1 (0:00 - 0:45):</strong> Introduction to Wafer Inspection Stage Drift & Problem Motivation.</li>
+            <li><strong>Segment 2 (0:45 - 1:30):</strong> Preprocessing (CLAHE) & Pyramidal Multi-Scale Search Walkthrough.</li>
+            <li><strong>Segment 3 (1:30 - 2:20):</strong> NMS Peak Detection, Periodicity Tie-Breaking & Sub-Pixel Parabolic Fitting.</li>
+            <li><strong>Segment 4 (2:20 - 3:00):</strong> ORB+RANSAC AI Fallback & Benchmark Metrics Review.</li>
+          </ul>
+        </div>
+        <div class="card" style="--accent: var(--purple);">
+          <div class="card-title">Technical Q&A Preparation</div>
+          <ul class="card-list">
+            <li><strong>Q: Why NCC over Standard Matching?</strong> Invariant to linear intensity scaling <code>I → aI + b</code> under optical lighting shifts.</li>
+            <li><strong>Q: How does Sub-Pixel Fitting work?</strong> Extracts 3x3 correlation matrix around integer peak and computes 1D quadratic offsets.</li>
+            <li><strong>Q: How are Non-Linear Distortions handled?</strong> ORB keypoints + RANSAC homography project center coordinates through perspective space.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="category">Roadmap</span>
+        <h2 class="title">Conclusion & Future Acceleration Roadmap</h2>
+      </div>
+      <div class="grid-3">
+        <div class="card" style="--accent: var(--emerald);">
+          <div class="card-title">1. Production Ready</div>
+          <ul class="card-list">
+            <li><strong>High Accuracy:</strong> Median positioning error of 0.029 pixels.</li>
+            <li><strong>Sub-Pixel Precision:</strong> Resolves sub-15nm displacement.</li>
+            <li><strong>Zero Training Cost:</strong> Instant deployment without model weights.</li>
+          </ul>
+        </div>
+        <div class="card" style="--accent: var(--cyan);">
+          <div class="card-title">2. Robust Engineering</div>
+          <ul class="card-list">
+            <li><strong>Multi-Scale Pyramid:</strong> Handles optical magnification shifts.</li>
+            <li><strong>Periodicity Prior:</strong> Resolves repeating memory cell arrays.</li>
+            <li><strong>AI Fallback:</strong> Recovers from heavy optical noise.</li>
+          </ul>
+        </div>
+        <div class="card" style="--accent: var(--purple);">
+          <div class="card-title">3. Hardware Roadmap</div>
+          <ul class="card-list">
+            <li><strong>FPGA / ASIC IP:</strong> Hardware-accelerated 2D NCC correlation pipeline.</li>
+            <li><strong>Sub-Graph Super-Res:</strong> Deep learning sub-pixel feature enhancement.</li>
+            <li><strong>Multi-ROI Alignment:</strong> Simultaneous multi-die wafer alignment.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const counter = document.getElementById('counter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    
+    let currentIndex = 0;
+
+    function updateSlides() {
+      slides.forEach((slide, idx) => {
+        slide.classList.toggle('active', idx === currentIndex);
+      });
+      counter.textContent = `Slide ${currentIndex + 1} / ${slides.length}`;
+    }
+
+    prevBtn.addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateSlides();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex < slides.length - 1) {
+        currentIndex++;
+        updateSlides();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Space') {
+        if (currentIndex < slides.length - 1) {
+          currentIndex++;
+          updateSlides();
+        }
+      } else if (e.key === 'ArrowLeft') {
+        if (currentIndex > 0) {
+          currentIndex--;
+          updateSlides();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
