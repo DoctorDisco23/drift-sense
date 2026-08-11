@@ -2,6 +2,7 @@ import os
 import cv2
 import numpy as np
 import pandas as pd
+np.random.seed(42)
 
 # -----------------------------
 # CONFIG
@@ -82,27 +83,27 @@ def add_unique_patch(img):
 
 
 def modify_periodic_cell(img):
-    """
-    Chooses one cell in the periodic grid and slightly modifies it.
-    This creates a hard case where many cells look similar,
-    but one is still the intended target.
-    """
     step = PATCH_SIZE
     cells = SEARCH_SIZE // step
 
-    gx = np.random.randint(2, cells - 2)
-    gy = np.random.randint(2, cells - 2)
+    # The tool aims at the center of the field of view.
+    # Real navigation drift is a few PIXELS, not several cells.
+    center_gx = cells // 2
+    center_gy = cells // 2
 
-    x = gx * step
-    y = gy * step
+    x = center_gx * step
+    y = center_gy * step
 
-    cell = img[y:y + step, x:x + step].copy()
+    # Sub-cell jitter (±4 px) simulates small realistic drift
+    jx = np.random.randint(-4, 5)
+    jy = np.random.randint(-4, 5)
+    x += jx
+    y += jy
 
-    # Slightly disturb the target cell
+    cell = img[y:y+step, x:x+step].copy()
     noise = np.random.normal(0, 25, cell.shape).astype(np.int16)
     cell = np.clip(cell.astype(np.int16) + noise, 0, 255).astype(np.uint8)
-
-    img[y:y + step, x:x + step] = cell
+    img[y:y+step, x:x+step] = cell
 
     return img, x, y
 
