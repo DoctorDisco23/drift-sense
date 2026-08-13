@@ -55,7 +55,7 @@ Because semiconductor layouts (DRAM arrays, FinFET gates) are **highly periodic*
                    ▼
       ┌─────────────────────────────┐
       │ 5 · SUB-PIXEL REFINEMENT    │  2D quadratic surface fit
-      │     + AI FALLBACK           │  ORB keypoints + RANSAC homography
+      │     + GEOMETRIC FALLBACK    |        ORB keypoints + RANSAC homography
       └─────────────────────────────┘
                    ▼
         Output: (x, y) + confidence
@@ -143,7 +143,7 @@ drift-sense/
 ├── create_presentation.py     # regenerates the .pptx deck
 ├── src/
 │   ├── preprocess.py          # CLAHE · denoise · Sobel · Z-score
-│   ├── matcher.py             # multi-scale NCC engine + AI fallback
+│   ├── matcher.py             # multi-scale NCC engine + Geometric fallback
 │   ├── peaks.py               # NMS peaks · periodicity · tie-break · sub-pixel
 │   ├── evaluate.py            # metrics reporter
 │   └── visualize.py           # GT-vs-prediction overlay generator
@@ -161,7 +161,7 @@ drift-sense/
 | **NCC over raw matching** | Normalized cross-correlation is invariant to linear intensity shifts (`I → aI + b`), preserving accuracy under illumination changes. |
 | **Physics-informed tie-break** | Stage drift is small, so the true site lies near the ROI center. When multiple matches are found, candidates score `0.8·score + 0.2·(1 − dist)` and the center-closest wins — exactly per the spec. |
 | **Periodicity-aware re-verification** | Repeating grids trigger a high-resolution re-score of candidates before tie-breaking. |
-| **Zero-shot AI fallback** | ORB + RANSAC homography engages only when NCC confidence < 0.40 — no training, no weights. |
+| **Zero-shot Geometric fallback** | ORB + RANSAC homography engages only when NCC confidence < 0.40 — no training, no weights. |
 | **Seeded benchmark** | `seed(42)` makes every result in this repo bit-for-bit reproducible. |
 
 ---
