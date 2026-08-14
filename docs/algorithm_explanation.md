@@ -1,17 +1,17 @@
 # Drift-Sense: Technical Algorithm Documentation
 
-**Owner**: Member B  
+**Owner**: Krish Deshpande  
 **Module**: Core Pattern Matching, Preprocessing, Multi-Scale Pyramid, Peak Extraction, Periodicity Handling & Sub-Pixel Interpolation  
-**Project**: Drift-Sense — Navigation-Error Recovery for Wafer Inspection Tools  
+**Project**: Drift-Sense — Navigation-Error Recovery for Wafer Inspection Tools
 
 ---
 
 ## 1. Problem Formulation
 
-In semiconductor wafer manufacturing, microscopic optical inspection tools must repeatedly align and position the wafer stage at designated reference coordinates $(x_{\text{true}}, y_{\text{true}})$. Due to stage drift, mechanical vibration, thermal expansion, and motor hysterisis, nominal stage positioning is susceptible to positioning errors up to several micrometers.
+In semiconductor wafer manufacturing, microscopic optical inspection tools must repeatedly align and position the wafer stage at designated reference coordinates $(x_{\text{true}}, y_{\text{true}}[...]
 
 The **Drift-Sense** algorithm solves the stage drift alignment problem:
-Given a high-resolution **Reference Image** template $R(x, y)$ of a target die/feature and a larger **Search Image** $S(x, y)$ captured by the optical sensor, locate the true center coordinates $(x_{\text{pred}}, y_{\text{pred}})$ with sub-pixel precision while remaining resilient against:
+Given a high-resolution **Reference Image** template $R(x, y)$ of a target die/feature and a larger **Search Image** $S(x, y)$ captured by the optical sensor, locate the true center coordinates $([...]
 1. **Scale variations** ($\pm 15\%$) between reference target and current magnification.
 2. **Illumination drift & sensor noise** (spatial gain variations, dark currents, micro-scratches).
 3. **High Spatial Periodicity** (repeating memory cell arrays, flash grid structures, identical logic blocks).
@@ -20,7 +20,7 @@ Given a high-resolution **Reference Image** template $R(x, y)$ of a target die/f
 
 ## 2. Algorithmic Pipeline Architecture
 
-The algorithmic architecture designed by Member B consists of five sequential processing stages:
+The algorithmic architecture designed by Krish Deshpande consists of five sequential processing stages:
 
 ```
 [Raw Search S & Reference R]
@@ -71,10 +71,10 @@ To neutralize illumination gradients across silicon wafer dies, images undergo C
   $$\nabla I(x, y) = \sqrt{\left(\frac{\partial I}{\partial x}\right)^2 + \left(\frac{\partial I}{\partial y}\right)^2}$$
 
 ### 3.2 Normalized Cross-Correlation (NCC) & Multi-Scale Pyramid (`src/matcher.py`)
-For each scale hypothesis $s \in \{s_{\text{base}} \cdot 0.95, s_{\text{base}}, s_{\text{base}} \cdot 1.05\}$, reference template $R$ is scaled to $R_s$ using bicubic interpolation ($s > 1$) or area averaging ($s < 1$).
+For each scale hypothesis $s \in \{s_{\text{base}} \cdot 0.95, s_{\text{base}}, s_{\text{base}} \cdot 1.05\}$, reference template $R$ is scaled to $R_s$ using bicubic interpolation ($s > 1$) or ar[...]
 
 The normalized correlation response map $C_s(u, v)$ at position $(u, v)$ is calculated as:
-$$C_s(u, v) = \frac{\sum_{x, y} \left(S(u+x, v+y) - \bar{S}_{u, v}\right) \left(R_s(x, y) - \bar{R}_s\right)}{\sqrt{\sum_{x,y} \left(S(u+x, v+y) - \bar{S}_{u, v}\right)^2 \sum_{x,y} \left(R_s(x,y) - \bar{R}_s\right)^2}}$$
+$$C_s(u, v) = \frac{\sum_{x, y} \left(S(u+x, v+y) - \bar{S}_{u, v}\right) \left(R_s(x, y) - \bar{R}_s\right)}{\sqrt{\sum_{x,y} \left(S(u+x, v+y) - \bar{S}_{u, v}\right)^2 \sum_{x,y} \left(R_s(x,y)[...]}
 
 where $\bar{R}_s$ is template mean intensity and $\bar{S}_{u, v}$ is local search image mean.
 
@@ -93,7 +93,7 @@ Semiconductor wafers contain repetitive memory arrays. When multiple peaks $p_i,
   where $\alpha = 0.8$, $d(p_i, \text{center}) = \sqrt{(x_i - x_0)^2 + (y_i - y_0)^2}$.
 
 ### 3.5 Sub-Pixel Quadratic Parabola Fitting (`src/peaks.py`)
-To overcome pixel discretization limits ($1\text{ px} \approx 500\text{ nm}$ on wafer tools), sub-pixel offset $(\delta x, \delta y)$ is computed by fitting a 2D second-order polynomial through a $3 \times 3$ correlation window around peak $(u^*, v^*)$:
+To overcome pixel discretization limits ($1\text{ px} \approx 500\text{ nm}$ on wafer tools), sub-pixel offset $(\delta x, \delta y)$ is computed by fitting a 2D second-order polynomial through a [...]
 
 $$\delta x = \frac{C(u^*-1, v^*) - C(u^*+1, v^*)}{2 \left(C(u^*-1, v^*) - 2C(u^*, v^*) + C(u^*+1, v^*)\right)}$$
 
