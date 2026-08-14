@@ -18,11 +18,11 @@
 
 ## 📌 The Problem
 
-Modern wafer inspection tools must return to **the exact same microscopic site** on a die thousands of times per day. In practice, thermal expansion, vibration and mechanical slack cause **navigation drift**, and the tool may land several pixels off-target.
+Modern wafer inspection tools must return to **the exact same microscopic site** on a die thousands of times per day. In practice, thermal expansion, vibration and mechanical slack cause **navigat[...]
 
-Because semiconductor layouts (DRAM arrays, FinFET gates) are **highly periodic**, a wrong location looks nearly identical to the right one — classical template matching breaks down exactly where precision matters most.
+Because semiconductor layouts (DRAM arrays, FinFET gates) are **highly periodic**, a wrong location looks nearly identical to the right one — classical template matching breaks down exactly wher[...]
 
-> **Task:** Given a 1000×1000 Reference Image (100× view) and a 1000×1000 Search Image (10× view) in which the reference pattern appears at ~10× reduced scale, return the center coordinates `(x, y)` of the matching region. If multiple matching regions are found, return the one closest to the center of the Search Image.
+> **Task:** Given a 1000×1000 Reference Image (100× view) and a 1000×1000 Search Image (10× view) in which the reference pattern appears at ~10× reduced scale, return the center coordinates `[...]`
 
 ---
 
@@ -64,7 +64,7 @@ Because semiconductor layouts (DRAM arrays, FinFET gates) are **highly periodic*
 
 ## 📊 Benchmark Results
 
-Evaluated on a **seeded, reproducible synthetic benchmark** (`np.random.seed(42)`) — 40 test cases (30 unique-texture *easy* + 10 highly periodic *hard*), 1000×1000 pairs, scale ratios 9:1–11:1, rotations up to ±2°, Gaussian noise and gamma degradation.
+Evaluated on a **seeded, reproducible synthetic benchmark** (`np.random.seed(42)`) — 40 test cases (30 unique-texture *easy* + 10 highly periodic *hard*), 1000×1000 pairs, scale ratios 9:1–11[...]
 
 | Metric | Result |
 |---|---|
@@ -103,7 +103,7 @@ Evaluated on a **seeded, reproducible synthetic benchmark** (`np.random.seed(42)
 | − Preprocessing | 22.870 |
 | − Sub-pixel refinement | 0.369 |
 
-On the AM-compliant benchmark, removing multi-scale search collapses accuracy to ~86 px (9:1–11:1 scale cases fail), and removing preprocessing to ~23 px (noise/gamma cases fail) — confirming every stage is necessary.
+On the AM-compliant benchmark, removing multi-scale search collapses accuracy to ~86 px (9:1–11:1 scale cases fail), and removing preprocessing to ~23 px (noise/gamma cases fail) — confirming[...]
 
 ---
 
@@ -189,7 +189,7 @@ drift-sense/
 
 | | |
 |---|---|
-| **Krish Deshpande** — *Algorithm Lead* | Preprocessing, multi-scale matcher, NMS peaks, periodicity tie-breaking, sub-pixel fit, ORB+RANSAC fallback, technical documentation |
+| **Krish** — *Algorithm Lead* | Preprocessing, multi-scale matcher, NMS peaks, periodicity tie-breaking, sub-pixel fit, ORB+RANSAC fallback, technical documentation |
 | **Shubh Garg** — *Data & Evaluation Lead* | Synthetic ground-truth pipeline, metrics & ablation harness, visualization overlays, repository & presentation |
 
 ---
